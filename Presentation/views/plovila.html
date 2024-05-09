@@ -1,0 +1,43 @@
+%rebase('osnova.html', naslov='Plovila', stran='plovila')
+
+<div >
+    <div style="flex:1;">
+      <table >
+        <thead>
+            <tr>
+                <th>Registracija</th>
+                <th>Ime</th>
+                <th>Letnik</th>
+                <th>Kapaciteta</th>  
+                <th>Tip</th>
+                <th>Dolžina</th>
+                <th>Charter</th>
+                <th>Cena</th>
+             </tr>
+        </thead>
+     
+      %for plovilo in plovila:
+        <tr>
+           <td>{{plovilo.registracija}}</td>
+           <td>{{plovilo.ime}}</td>
+           <td>{{plovilo.letnik}}</td>
+           <td>{{plovilo.kapaciteta}}</td>
+           <td>{{plovilo.tip}}</td>
+           <td>{{plovilo.dolzina}}</td>
+           <td>{{plovilo.charter}}</td>
+           <td>{{plovilo.cena}}</td>
+        </tr>
+      %end
+      </table>
+
+
+    </div>    
+
+    </div>
+   
+</div>
+
+
+  
+
+  
