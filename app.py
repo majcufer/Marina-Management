@@ -16,12 +16,21 @@ def static(filename):
 @get('/')
 def index():
     """
-    Domača stran s plovili.
+    Domača stran.
+    """
+    return template('index.html')
+
+@post('/iskanje/')
+def poisci_proste():
+    """
+    Stran s prostimi plovili za določeno obdobje.
     """   
-  
-    plovila = service.dobi_plovila()  
+    user_zacetek = request.forms.getunicode("user_zacetek")
+    user_konec = request.forms.getunicode("user_konec")
+
+    prosta_plovila = service.dobi_prosta_plovila(user_zacetek, user_konec)  
         
-    return template('plovila.html', plovila = plovila)
+    return template('prosta_plovila.html', prosta_plovila = prosta_plovila)
 
 
 if __name__ == "__main__":

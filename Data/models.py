@@ -58,3 +58,16 @@ class zaposleni:
     ime : str=field(default="")
     opis: str=field(default="")
     charter: str=field(default="")
+
+@dataclass_json
+@dataclass
+class Uporabnik:
+    username: str = field(default="")
+    role: str = field(default="")
+    password_hash: str = field(default="")
+    last_login: str = field(default="")
+
+@dataclass
+class UporabnikDto:
+    username: str = field(default="")
+    role: str = field(default="")
