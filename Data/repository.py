@@ -36,6 +36,14 @@ class Repo:
         prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
         return prosta_plovila
     
+    def dodaj_rezervacijo(self, r : rezervacija) -> List[rezervacija]:
+        self.cur.execute("""
+            INSERT into rezervacija(zacetek, konec, gost, plovilo)
+            VALUES (%s, %s, %s, %s)
+        """, (r.zacetek, r.konec, r.gost, r.plovilo))
+        self.conn.commit()
+    
+
     def dodaj_uporabnika(self, uporabnik: Uporabnik):
         self.cur.execute("""
             INSERT into uporabniki(username, role, password_hash, last_login)

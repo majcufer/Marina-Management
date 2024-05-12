@@ -1,40 +1,47 @@
 %rebase('osnova.html', naslov='Prosta Plovila', stran='prosta_plovila')
 
 <div >
-    <div style="flex:1;">
-      <table >
-        <thead>
-            <tr>
-                <th>Registracija</th>
-                <th>Ime</th>
-                <th>Letnik</th>
-                <th>Kapaciteta</th>  
-                <th>Tip</th>
-                <th>Dolžina</th>
-                <th>Charter</th>
-                <th>Cena</th>
-             </tr>
-        </thead>
-     
-      %for plovilo in prosta_plovila:
-        <tr>
-           <td>{{plovilo.registracija}}</td>
-           <td>{{plovilo.ime}}</td>
-           <td>{{plovilo.letnik}}</td>
-           <td>{{plovilo.kapaciteta}}</td>
-           <td>{{plovilo.tip}}</td>
-           <td>{{plovilo.dolzina}}</td>
-           <td>{{plovilo.charter}}</td>
-           <td>{{plovilo.cena}}</td>
-        </tr>
-      %end
-      </table>
-
-
-    </div>    
-
-    </div>
-   
+  <div>
+    Datum prihoda: {{user_zacetek}}
+    Datum odhoda: {{user_konec}}
+  </div>
+  <div style="flex:1;">
+    <table >
+      <thead>
+          <tr>
+              <th>Registracija</th>
+              <th>Ime</th>
+              <th>Letnik</th>
+              <th>Kapaciteta</th>  
+              <th>Tip</th>
+              <th>Dolžina</th>
+              <th>Charter</th>
+              <th>Cena</th>
+            </tr>
+      </thead>
+    
+    %for plovilo in prosta_plovila:
+      <tr>
+          <td>{{plovilo.registracija}}</td>
+          <td>{{plovilo.ime}}</td>
+          <td>{{plovilo.letnik}}</td>
+          <td>{{plovilo.kapaciteta}}</td>
+          <td>{{plovilo.tip}}</td>
+          <td>{{plovilo.dolzina}}</td>
+          <td>{{plovilo.charter}}</td>
+          <td>{{plovilo.cena}}</td>
+          <td>
+          <form action="{{url('/naredi_rezervacijo')}}" method="POST">
+            <input type="hidden" name="user_zacetek" value="{{user_zacetek}}">
+            <input type="hidden" name="user_konec" value="{{user_konec}}">
+            <input type="hidden" name="plovilo" value="{{plovilo.registracija}}">
+            <button type="submit">Rezerviraj</button>
+          </form>
+          </td>
+      </tr>
+    %end
+    </table>
+  </div>
 </div>
 
 

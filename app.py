@@ -30,7 +30,20 @@ def poisci_proste():
 
     prosta_plovila = service.dobi_prosta_plovila(user_zacetek, user_konec)  
         
-    return template('prosta_plovila.html', prosta_plovila = prosta_plovila)
+    return template('prosta_plovila.html', prosta_plovila = prosta_plovila, user_zacetek=user_zacetek, user_konec=user_konec)
+
+@post('/naredi_rezervacijo')
+def naredi_rezervacijo():
+
+    zacetek = request.forms.getunicode("user_zacetek")
+    konec = request.forms.getunicode("user_konec")
+    gost = '280297500987' #to zamenjaj z uporabnikom
+    plovilo = request.forms.getunicode("plovilo")
+
+    service.naredi_rezervacijo(zacetek, konec, gost, plovilo)
+    
+    
+    redirect(url('/'))
 
 
 if __name__ == "__main__":
