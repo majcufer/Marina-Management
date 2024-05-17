@@ -64,6 +64,7 @@ class zaposleni:
 class Uporabnik:
     username: str = field(default="")
     role: str = field(default="")
+    oseba: str = field(default="")
     password_hash: str = field(default="")
     last_login: str = field(default="")
 
@@ -71,3 +72,4 @@ class Uporabnik:
 class UporabnikDto:
     username: str = field(default="")
     role: str = field(default="")
+    oseba: str = field(default="")

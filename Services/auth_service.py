@@ -26,16 +26,17 @@ class AuthService:
         geslo_bytes = geslo.encode('utf-8')
         # Ustvarimo hash iz gesla, ki ga je vnesel uporabnik
         succ = bcrypt.checkpw(geslo_bytes, user.password_hash.encode('utf-8'))
+        
 
         if succ:
             # popravimo last login time
             user.last_login = date.today().isoformat()
             self.repo.posodobi_uporabnika(user)
-            return UporabnikDto(username=user.username, role=user.role)
+            return UporabnikDto(username=user.username, role=user.role, oseba=user.oseba)
         
         return False
 
-    def dodaj_uporabnika(self, uporabnik: str, rola: str, geslo: str) -> UporabnikDto:
+    def dodaj_uporabnika(self, uporabnik: str, rola: str, oseba: str, geslo: str) -> UporabnikDto:
 
         # zgradimo hash za geslo od uporabnika
 
@@ -53,6 +54,7 @@ class AuthService:
         u = Uporabnik(
             username=uporabnik,
             role=rola,
+            oseba=oseba,
             password_hash=password_hash.decode(),
             last_login= date.today().isoformat()
         )
@@ -60,4 +62,3 @@ class AuthService:
         self.repo.dodaj_uporabnika(u)
 
         return UporabnikDto(username=uporabnik, role=rola)
-

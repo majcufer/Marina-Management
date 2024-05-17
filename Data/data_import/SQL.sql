@@ -52,3 +52,12 @@ create table crewlist (
     oseba text REFERENCES gost(emso) not null,
     vloga text not null
 );
+
+###############################################################
+create table uporabniki (
+    username text,
+    role text,
+    password_hash text,
+    last_login text,
+    oseba text
+);

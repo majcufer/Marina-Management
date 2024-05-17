@@ -1,0 +1,32 @@
+%rebase('osnova.html', naslov='Rezervacije', stran='rezervacije')
+
+<div >
+  <div style="flex:1;">
+    <table >
+      <thead>
+          <tr>
+              <th>Id</th>
+              <th>Začetek</th>
+              <th>Konec</th>
+              <th>Gost</th>  
+              <th>Plovilo</th>
+            </tr>
+      </thead>
+    
+    %for rezervacija in rezervacije:
+      <tr>
+          <td>{{rezervacija.id}}</td>
+          <td>{{rezervacija.zacetek}}</td>
+          <td>{{rezervacija.konec}}</td>
+          <td>{{rezervacija.gost}}</td>
+          <td>{{rezervacija.plovilo}}</td>
+      </tr>
+    %end
+    </table>
+  </div>
+</div>
+
+
+  
+
+  

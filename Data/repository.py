@@ -42,19 +42,27 @@ class Repo:
             VALUES (%s, %s, %s, %s)
         """, (r.zacetek, r.konec, r.gost, r.plovilo))
         self.conn.commit()
+
+    def dobi_rezervacije(self) -> List[rezervacija]:
+        self.cur.execute("""
+            SELECT * FROM rezervacija
+        """)
+
+        rezervacije = [rezervacija.from_dict(t) for t in self.cur.fetchall()]
+        return rezervacije
     
 
     def dodaj_uporabnika(self, uporabnik: Uporabnik):
         self.cur.execute("""
-            INSERT into uporabniki(username, role, password_hash, last_login)
-            VALUES (%s, %s, %s, %s)
-            """, (uporabnik.username,uporabnik.role, uporabnik.password_hash, uporabnik.last_login))
+            INSERT into uporabniki(username, role, oseba, password_hash, last_login)
+            VALUES (%s, %s, %s, %s, %s)
+            """, (uporabnik.username,uporabnik.role, uporabnik.oseba, uporabnik.password_hash, uporabnik.last_login))
         self.conn.commit()
 
 
     def dobi_uporabnika(self, username:str) -> Uporabnik:
         self.cur.execute("""
-            SELECT username, role, password_hash, last_login
+            SELECT username, role, oseba, password_hash, last_login
             FROM uporabniki
             WHERE username = %s
         """, (username,))

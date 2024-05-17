@@ -25,3 +25,6 @@ class PlovilaService:
             plovilo=plovilo
         )
         self.repo.dodaj_rezervacijo(r)
+
+    def dobi_rezervacije(self) -> List[rezervacija]:
+        return self.repo.dobi_rezervacije()
