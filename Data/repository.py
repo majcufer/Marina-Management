@@ -75,3 +75,10 @@ class Repo:
             Update uporabniki set last_login = %s where username = %s
             """, (uporabnik.last_login,uporabnik.username))
         self.conn.commit()
+
+    def dodaj_gosta(self, gost: gost):
+        self.cur.execute("""
+            INSERT into gost(emso, ime)
+            VALUES (%s, %s)
+            """, (gost.emso,gost.ime))
+        self.conn.commit()

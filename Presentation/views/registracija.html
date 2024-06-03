@@ -1,0 +1,30 @@
+%rebase('osnova.html', naslov='Prijava', stran='prijava')
+
+<form action="{{url('/registracija')}}" method="POST" style="width:60%">
+  <div class="form-group">
+    <label for="username">Ime in Priimek</label>
+    <input type="input" class="form-control" name="ime"  placeholder="Ime Priimek">
+  </div>
+
+    <div class="form-group">
+      <label for="username">Uporabniško ime</label>
+      <input type="input" class="form-control" name="username"  placeholder="Vnesi uporabniško ime">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Geslo</label>
+      <input type="password" class="form-control" name="password" placeholder="Geslo">
+    </div>
+
+    <div class="form-group">
+      <label for="oseba">EMŠO</label>
+      <input type="input" class="form-control" name="oseba" placeholder="EMŠO">
+    </div>
+
+    <div class="form-group">
+      <input type="hidden" class="form-control" name="rola" value="gost">
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Registracija</button>
+  </form>
+%end

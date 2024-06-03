@@ -35,7 +35,9 @@ def index():
     """
     Domača stran.
     """
-    return template('index.html')
+    rola = request.get_cookie("rola")
+    uporabnik = request.get_cookie("uporabnik")
+    return template('index.html', rola = rola, uporabnik=uporabnik)
 
 @post('/iskanje/')
 def poisci_proste():
@@ -45,9 +47,12 @@ def poisci_proste():
     user_zacetek = request.forms.getunicode("user_zacetek")
     user_konec = request.forms.getunicode("user_konec")
 
+    rola = request.get_cookie("rola")
+    uporabnik = request.get_cookie("uporabnik")
+
     prosta_plovila = service.dobi_prosta_plovila(user_zacetek, user_konec)  
         
-    return template('prosta_plovila.html', prosta_plovila = prosta_plovila, user_zacetek=user_zacetek, user_konec=user_konec)
+    return template('prosta_plovila.html', prosta_plovila = prosta_plovila, user_zacetek=user_zacetek, user_konec=user_konec, rola=rola, uporabnik=uporabnik)
 
 @post('/naredi_rezervacijo')
 @cookie_required
@@ -69,7 +74,10 @@ def rezervacije():
     """
     rezervacije = service.dobi_rezervacije()
 
-    return template('rezervacije.html', rezervacije=rezervacije)
+    rola = request.get_cookie("rola")
+    uporabnik = request.get_cookie("uporabnik")
+
+    return template('rezervacije.html', rezervacije=rezervacije, rola=rola, uporabnik=uporabnik)
 
 @post('/prijava')
 def prijava():
@@ -81,7 +89,7 @@ def prijava():
     password = request.forms.get('password')
 
     if not auth.obstaja_uporabnik(username):
-        return template("prijava.html", napaka="Uporabnik s tem imenom ne obstaja")
+        return template("prijava.html", rola=None, oseba=None, napaka="Uporabnik s tem imenom ne obstaja")
 
     prijava = auth.prijavi_uporabnika(username, password)
     if prijava:
@@ -90,16 +98,16 @@ def prijava():
         response.set_cookie("oseba", prijava.oseba)
         
         # redirect v večino primerov izgleda ne deluje
-        #redirect(url('/rezervacije'))
+        redirect(url('/'))
 
         # Uporabimo kar template, kot v sami "index" funkciji
 
         # transakcije = service.dobi_transakcije()        
-        #return template('rezervacije.html', rezervacije = rezervacije)
+        # return template('rezervacije.html', rezervacije = rezervacije)
         
     else:
         return template("prijava.html", uporabnik=None, rola=None, oseba=None, napaka="Neuspešna prijava. Napačno geslo ali uporabniško ime.")
-
+    
 @get('/odjava')
 def odjava():
     """
@@ -110,11 +118,31 @@ def odjava():
     response.delete_cookie("rola")
     response.delete_cookie("oseba")
     
-    return template('prijava.html', uporabnik=None, rola=None, oseba=None, napaka=None)
+    return template('index.html', uporabnik=None, rola=None, oseba=None, napaka=None)
+
+@get('/registracija')
+def registracija_get():
+    return template('registracija.html', rola=None, uporabnik=None)
+
+@post('/registracija')
+def registracija_post():
+    """
+    Registracija uporabnika. Dodajanje uporabnika v tabelo uporabniki.
+    """
+    ime = request.forms.getunicode('ime')
+    username = request.forms.get('username')
+    password = request.forms.get('password')
+    role = request.forms.get('rola')
+    oseba = request.forms.get('oseba')
+
+    auth.dodaj_uporabnika(username, role, oseba, password)
+    auth.dodaj_gosta(oseba, ime)
+    
+    redirect(url('/'))
+    
 
 
 
-auth.dodaj_uporabnika('maj', 'admin', '280297500987', 'maj')
 
 if __name__ == "__main__":
     run(host='localhost', port=SERVER_PORT, reloader=RELOADER, debug=True)

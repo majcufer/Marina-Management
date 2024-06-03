@@ -62,3 +62,15 @@ class AuthService:
         self.repo.dodaj_uporabnika(u)
 
         return UporabnikDto(username=uporabnik, role=rola)
+
+    def dodaj_gosta(self, emso: str, ime: str) -> gost:
+        g = gost(
+            emso=emso,
+            ime=ime
+        )
+        try:
+            self.repo.dodaj_gosta(g)
+            return True
+        except:
+            return False
+        
