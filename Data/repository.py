@@ -43,14 +43,24 @@ class Repo:
         """, (r.zacetek, r.konec, r.gost, r.plovilo))
         self.conn.commit()
 
-    def dobi_rezervacije(self) -> List[rezervacija]:
+    def dobi_rezervacije_gost(self, gost: str) -> List[rezervacija]:
         self.cur.execute("""
             SELECT * FROM rezervacija
-        """)
+            WHERE gost = %s
+        """, (gost,))
 
         rezervacije = [rezervacija.from_dict(t) for t in self.cur.fetchall()]
         return rezervacije
     
+    def dobi_rezervacije_charter(self, charter: str) -> List[rezervacija]:
+        self.cur.execute("""
+            SELECT id, zacetek, konec, gost, plovilo FROM rezervacija
+            LEFT JOIN plovilo ON registracija = plovilo
+            WHERE charter = %s
+        """, (charter,))
+
+        rezervacije = [rezervacija.from_dict(t) for t in self.cur.fetchall()]
+        return rezervacije
 
     def dodaj_uporabnika(self, uporabnik: Uporabnik):
         self.cur.execute("""
@@ -82,3 +92,23 @@ class Repo:
             VALUES (%s, %s)
             """, (gost.emso,gost.ime))
         self.conn.commit()
+
+    def dobi_gosta(self, uporabnik: str) -> gost:
+        self.cur.execute("""
+            SELECT emso, ime FROM uporabniki
+            LEFT JOIN gost ON emso = oseba
+            WHERE username = %s
+        """, (uporabnik,))
+         
+        g = gost.from_dict(self.cur.fetchone())
+        return g
+    
+    def dobi_zaposlenega(self, uporabnik: str) -> zaposleni:
+        self.cur.execute("""
+            SELECT emso, ime, opis, charter FROM uporabniki
+            LEFT JOIN zaposleni ON emso = oseba
+            WHERE username = %s
+        """, (uporabnik,))
+         
+        z = zaposleni.from_dict(self.cur.fetchone())
+        return z

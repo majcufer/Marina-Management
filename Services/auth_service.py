@@ -74,3 +74,10 @@ class AuthService:
         except:
             return False
         
+    def dobi_gosta(self, uporabnik:str) -> gost:
+        gost = self.repo.dobi_gosta(uporabnik)
+        return gost
+    
+    def dobi_zaposlenega(self, uporabnik:str) -> zaposleni:
+        zaposleni = self.repo.dobi_zaposlenega(uporabnik)
+        return zaposleni

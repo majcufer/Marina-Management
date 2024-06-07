@@ -1,0 +1,39 @@
+%rebase('osnova.html', naslov='Moja Marina', stran='moja_marina')
+
+<div >
+  Moje rezervacije
+  <div style="flex:1;">
+    <table >
+      <thead>
+          <tr>
+              <th>Id</th>
+              <th>Začetek</th>
+              <th>Konec</th>
+              <th>Gost</th>  
+              <th>Plovilo</th>
+            </tr>
+      </thead>
+    
+    %for rezervacija in rezervacije:
+      <tr>
+          <td>{{rezervacija.id}}</td>
+          <td>{{rezervacija.zacetek}}</td>
+          <td>{{rezervacija.konec}}</td>
+          <td>{{rezervacija.gost}}</td>
+          <td>{{rezervacija.plovilo}}</td>
+      </tr>
+    %end
+    </table>
+  </div>
+</div>
+<div>
+  Moji podatki
+  Ime: {{gost.ime}}
+  EMSO: {{gost.emso}}
+  Uporabniško ime: {{uporabnik}}
+</div>
+
+
+  
+
+  

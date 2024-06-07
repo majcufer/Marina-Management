@@ -26,5 +26,8 @@ class PlovilaService:
         )
         self.repo.dodaj_rezervacijo(r)
 
-    def dobi_rezervacije(self) -> List[rezervacija]:
-        return self.repo.dobi_rezervacije()
+    def dobi_rezervacije_gost(self, gost: str) -> List[rezervacija]:
+        return self.repo.dobi_rezervacije_gost(gost)
+    
+    def dobi_rezervacije_charter(self, charter: str) -> List[rezervacija]:
+        return self.repo.dobi_rezervacije_charter(charter)
