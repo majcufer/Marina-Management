@@ -46,13 +46,34 @@ def poisci_proste():
     """   
     user_zacetek = request.forms.getunicode("user_zacetek")
     user_konec = request.forms.getunicode("user_konec")
+    st_ljudi = request.forms.getunicode("st_ljudi")
+    user_tip = request.forms.getunicode("user_tip")
+
+    minP = request.forms.getunicode("minPrice")
+    maxP = request.forms.getunicode("maxPrice")
+    minL = request.forms.getunicode("minLength")
+    maxL = request.forms.getunicode("maxLength")
+    minY = request.forms.getunicode("minYear")
+    maxY = request.forms.getunicode("maxYear")
+
+    minPrice = int(minP or 0) if minP != '' else None
+    maxPrice = int(maxP or 0) if maxP != '' else None
+    minLength = int(minL or 0) if minL != '' else None
+    maxLength = int(maxL or 0) if maxL != '' else None
+    minYear = int(minY or 0) if minY != '' else None
+    maxYear = int(maxY or 0) if maxY != '' else None
 
     rola = request.get_cookie("rola")
     uporabnik = request.get_cookie("uporabnik")
 
-    prosta_plovila = service.dobi_prosta_plovila(user_zacetek, user_konec)  
+    if any([minPrice, maxPrice, minLength, maxLength, minYear, maxYear]):
+        prosta_plovila = service.filtriraj(minPrice, maxPrice, minLength, maxLength, minYear, maxYear)
+    else:   
+        prosta_plovila = service.dobi_prosta_plovila(user_zacetek, user_konec, st_ljudi, user_tip)
+        service.create_view(user_zacetek, user_konec, st_ljudi, user_tip)
         
-    return template('prosta_plovila.html', prosta_plovila = prosta_plovila, user_zacetek=user_zacetek, user_konec=user_konec, rola=rola, uporabnik=uporabnik)
+    return template('prosta_plovila.html', prosta_plovila = prosta_plovila, user_zacetek=user_zacetek, user_konec=user_konec,
+                    rola=rola, uporabnik=uporabnik, st_ljudi=st_ljudi, user_tip=user_tip)
 
 @post('/naredi_rezervacijo')
 @cookie_required

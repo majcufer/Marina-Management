@@ -1,36 +1,52 @@
 %rebase('osnova.html', naslov='Iskanje', stran='iskanje')
+<header>
 
-<div >
-  <div>
-    <form action="/iskanje/" method="post">
-      <label for="user_zacetek">Datum prihoda:</label>
-      <input type="date" name="user_zacetek">
-  
-      <label for="user_konec">Datum odhoda:</label>
-      <input type="date" name="user_konec">
-      <button type="submit">Najdi!</button>
-    </form>
-  </div>
+  <!-- This div is  intentionally blank. It creates the transparent black overlay over the video which you can modify in the CSS -->
+  <div class="overlay"></div>
 
-  <!-- OBRAZEC ZA PRIJAVO -->
-  <!-- <div>
-    <form action="{{url('/prijava')}}" method="POST" style="width:60%">
-      <div class="form-group">
-        <label for="username">Uporabniško ime</label>
-        <input type="input" class="form-control" name="username"  placeholder="Vnesi uporabniško ime">
+  <!-- The HTML5 video element that will create the background video on the header -->
+  <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+    <source src="https://cdn.coverr.co/videos/coverr-a-small-island-4125/720p.mp4" type="video/mp4">
+  </video>
+
+  <!-- The header content -->
+  <div class="container h-100">
+    <div class="container h-100 d-flex justify-content-center align-items-center">
+      <div class="text-white text-center">
+        <h1 class="seymour-one-regular">Poiščite naslednjo avanturo</h1>
+        <p style="font-size: 1.5em; font-weight: lighter;">Iščite ponudbo jadrnic, katamaranov in jaht</p>
+
+        <div>
+          <form action="/iskanje/" method="post" class="row row-cols-lg-auto align-items-center bg-danger p-1 rounded mt-5">
+            <label for="user_zacetek" class="col gx-1">Prihod:</label>
+            <div class="col">
+              <input type="date" name="user_zacetek" class="form-control">
+            </div>
+            <label for="user_konec" class="col gx-1">Odhod:</label>
+            <div class="col">
+              <input type="date" name="user_konec" class="form-control">
+            </div>
+            <label for="st_ljudi" class="col gx-1">Število oseb:</label>
+            <div class="col" style="max-width: 100px;">
+              <input type="number" name="st_ljudi" min="1" value="1" class="form-control">
+            </div>
+            <label for="user_tip" class="col gx-1">Tip plovila:</label>
+            <div class="col">
+              <select name="user_tip" class="form-select">
+                <option selected>Izberi</option>
+                <option>Jadrnica</option>
+                <option>Katamaran</option>
+                <option>Motorna jahta</option>
+              </select>
+            </div>
+            <div class="col gx-1">
+              <button type="submit" class="btn btn-warning">Išči</button>
+            </div>
+          </form>
+        </div>
+
       </div>
-      <div class="form-group">
-        <label for="password">Geslo</label>
-        <input type="password" class="form-control" name="password" placeholder="Geslo">
-      </div>
-     
-      <button type="submit" class="btn btn-primary">Prijava</button>
-    </form>
+    </div>
   </div>
-
-</div> -->
-
-
-  
-
-  
+  </div>
+</header>
