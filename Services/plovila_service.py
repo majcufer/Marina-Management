@@ -14,8 +14,11 @@ class PlovilaService:
     def dobi_plovila(self) -> List[plovilo]:
         return self.repo.dobi_plovila()
 
-    def dobi_prosta_plovila(self, user_zacetek, user_konec) -> List[plovilo]:
-        return self.repo.dobi_prosta_plovila(user_zacetek, user_konec)
+    def dobi_prosta_plovila(self, user_zacetek, user_konec, st_ljudi, user_tip) -> List[plovilo]:
+        return self.repo.dobi_prosta_plovila(user_zacetek, user_konec, st_ljudi, user_tip)
+    
+    def create_view(self, user_zacetek, user_konec, st_ljudi, user_tip) -> List[plovilo]:
+        self.repo.create_view(user_zacetek, user_konec, st_ljudi, user_tip)
 
     def naredi_rezervacijo(self, zacetek: date, konec: date, gost: str, plovilo: int) -> None:
         r = rezervacija(
@@ -31,3 +34,6 @@ class PlovilaService:
     
     def dobi_rezervacije_charter(self, charter: str) -> List[rezervacija]:
         return self.repo.dobi_rezervacije_charter(charter)
+    
+    def filtriraj(self, minPrice, maxPrice, minLength, maxLength, minYear, maxYear) ->  List[plovilo]:
+        return self.repo.filtriraj(minPrice, maxPrice, minLength, maxLength, minYear, maxYear)
