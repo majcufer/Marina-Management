@@ -11,9 +11,6 @@ class PlovilaService:
         # lahko dobili tudi kot input v konstrukturju.
         self.repo = Repo()
 
-    def dobi_plovila(self) -> List[plovilo]:
-        return self.repo.dobi_plovila()
-
     def dobi_prosta_plovila(self, user_zacetek, user_konec, st_ljudi, user_tip) -> List[plovilo]:
         return self.repo.dobi_prosta_plovila(user_zacetek, user_konec, st_ljudi, user_tip)
     
@@ -29,11 +26,14 @@ class PlovilaService:
         )
         self.repo.dodaj_rezervacijo(r)
 
-    def dobi_rezervacije_gost(self, gost: str) -> List[rezervacija]:
+    def dobi_rezervacije_gost(self, gost: str) -> List[rezervacijaDto]:
         return self.repo.dobi_rezervacije_gost(gost)
     
-    def dobi_rezervacije_charter(self, charter: str) -> List[rezervacija]:
+    def dobi_rezervacije_charter(self, charter: str) -> List[rezervacijaDto]:
         return self.repo.dobi_rezervacije_charter(charter)
     
     def filtriraj(self, minPrice, maxPrice, minLength, maxLength, minYear, maxYear) ->  List[plovilo]:
         return self.repo.filtriraj(minPrice, maxPrice, minLength, maxLength, minYear, maxYear)
+    
+    def odstrani_rezervacijo(self, id):
+        self.repo.odstrani_rezervacijo(id)

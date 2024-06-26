@@ -1,125 +1,131 @@
 %rebase('osnova.html', naslov='Prosta Plovila', stran='prosta_plovila')
-<div class="container-sm m-4">
-  <h2 class="fw-lighter">Najdenih {{len(prosta_plovila)}} plovil, ki vam ustrezajo</h2>
-</div>
-<div class="row px-4">
-  <div class="col-8">
-    <div class="container-sm">
-      <ul class="list-group">
-        %for plovilo in prosta_plovila:
-        <li class="container-sm list-group-item">
-          <div class="row">
-            <div class="col-6">
-              <h4>{{plovilo.ime}}</h4>
-              <table class="table table-borderless table-sm">
-                <tr>
-                  <td><span class="fw-lighter">Letnik: </span>{{plovilo.letnik}}</td>
-                  <td><span class="fw-lighter">Tip plovila: </span>{{plovilo.tip}}</td>
-                </tr>
-                <tr>
-                  <td><span class="fw-lighter">Št. oseb: </span>{{plovilo.kapaciteta}}</td>
-                  <td><span class="fw-lighter">Dolžina: </span>{{plovilo.dolzina}}</td>
-                </tr>
-              </table>
+
+<div class="container px-2 my-4">
+  <div class="row">
+
+    <!-- Filters -->
+    <div class="col-lg-3">
+      <div class="container p-2 rounded bg-danger mb-4">
+        <form action="/iskanje/" method="post">
+          <div class="mb-3">
+            <label for="user_zacetek" class="form-label">Datum prihoda</label>
+            <input type="date" name="user_zacetek" value="{{ user_zacetek }}" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="user_konec" class="form-label">Datum odhoda</label>
+            <input type="date" name="user_konec" value="{{ user_konec }}" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="st_ljudi" class="form-label">Število oseb</label>
+            <input type="number" name="st_ljudi" min="1" value="{{ st_ljudi }}" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="user_tip" class="form-label">Tip plovila</label>
+            <select name="user_tip" class="form-select">
+              <option disabled selected>{{ user_tip }}</option>
+              <option>Izberi</option>
+              <option>Jadrnica</option>
+              <option>Katamaran</option>
+              <option>Motorna jahta</option>
+            </select>
+          </div>
+          <div class="d-grid"><button type="submit" class="btn btn-warning btn-block">Išči</button></div>
+        </form>
+      </div>
+
+      <div class="container border border-light-subtle rounded border-2">
+        <form action="/iskanje/" method="post">
+          <!-- Cena -->
+          <div class="mb-3">
+            <label class="form-label">Cena</label>
+            <div class="d-flex align-items-center">
+              <input type="number" class="form-control mr-2" name="minPrice" placeholder="Min">
+              <span class="mx-2">do</span>
+              <input type="number" class="form-control ml-2" name="maxPrice" placeholder="Max">
             </div>
+          </div>
 
-            <div class="col-3">
-              %if plovilo.charter == "Angelina Yacht Charter":
-              <img src="{{ url('static', filename='angelina.png') }}" width="150px" style="max-height: 80px;">
-              %elif plovilo.charter == "Dream Yacht Charter":
-              <img src="{{ url('static', filename='dream.png') }}" width="150px" style="max-height: 80px;">
-              %elif plovilo.charter == "Euronautic":
-              <img src="{{ url('static', filename='euronautic.png') }}" width="150px" style="max-height: 80px;">
-              %else:
-              <img src="{{ url('static', filename='pitter.png') }}" width="150px" style="max-height: 80px;">
-              %end
-            </div>
-
-            <div class="col-3">
-              <p class="fs-2">{{plovilo.cena}}€<span class="fw-lighter fs-4">/dan</span></p>
-              <form action="{{url('/naredi_rezervacijo')}}" method="POST">
-                <input type="hidden" name="user_zacetek" value="{{user_zacetek}}">
-                <input type="hidden" name="user_konec" value="{{user_konec}}">
-                <input type="hidden" name="plovilo" value="{{plovilo.registracija}}">
-                <button type="submit" class="btn btn-danger">Rezerviraj</button>
-              </form>
+          <!-- Dolžina -->
+          <div class="mb-3">
+            <label class="form-label">Dolžina</label>
+            <div class="d-flex align-items-center">
+              <input type="number" class="form-control mr-2" name="minLength" placeholder="Min">
+              <span class="mx-2">do</span>
+              <input type="number" class="form-control ml-2" name="maxLength" placeholder="Max">
             </div>
           </div>
-        </li>
-        %end
-      </ul>
 
-    </div>
-  </div>
-
-  <div class="col-4">
-    <form action="/iskanje/" method="post" class="p-1 rounded bg-danger">
-      <div>
-        <label for="user_zacetek">Datum prihoda</label>
-        <input type="date" name="user_zacetek" value={{user_zacetek}} class="form-control">
-      </div>
-      <div>
-        <label for="user_konec">Datum odhoda</label>
-        <input type="date" name="user_konec" value={{user_konec}} class="form-control">
-      </div>
-      <div>
-        <label for="st_ljudi">Število oseb</label>
-        <input type="number" name="st_ljudi" min="1" value="{{st_ljudi}}" class="form-control">
-      </div>
-      <div>
-        <label for="user_tip">Tip plovila</label>
-        <select name="user_tip" class="form-select">
-          <option disabled selected>{{user_tip}}</option>
-          <option>Izberi</option>
-          <option>Jadrnica</option>
-          <option>Katamaran</option>
-          <option>Motorna jahta</option>
-        </select>
-      </div>
-      <div class="d-grid pt-1"><button type="submit" class="btn btn-warning">Išči</button></div>
-    </form>
-
-    <div class="container border border-light-subtle rounded border-2">
-      <form action="/iskanje/" method="post">
-        <!-- Cena -->
-        <div class="form-group">
-          <label for="priceRange">Cena</label>
-          <div class="d-flex align-items-center">
-            <input type="number" class="form-control mr-2" name="minPrice" placeholder="Min">
-            <span class="mx-2">do</span>
-            <input type="number" class="form-control ml-2" name="maxPrice" placeholder="Max">
+          <!-- Letnik -->
+          <div class="mb-3">
+            <label class="form-label">Letnik</label>
+            <div class="d-flex align-items-center">
+              <input type="number" class="form-control mr-2" name="minYear" placeholder="Min">
+              <span class="mx-2">do</span>
+              <input type="number" class="form-control ml-2" name="maxYear" placeholder="Max">
+            </div>
           </div>
-        </div>
-        
-        <!-- Dolžina -->
-        <div class="form-group">
-          <label for="lengthRange">Dolžina</label>
-          <div class="d-flex align-items-center">
-            <input type="number" class="form-control mr-2" name="minLength" placeholder="Min">
-            <span class="mx-2">do</span>
-            <input type="number" class="form-control ml-2" name="maxLength" placeholder="Max">
-          </div>
-        </div>
-        
-        <!-- Letnik -->
-        <div class="form-group">
-          <label for="yearRange">Letnik</label>
-          <div class="d-flex align-items-center">
-            <input type="number" class="form-control mr-2" name="minYear" placeholder="Min">
-            <span class="mx-2">do</span>
-            <input type="number" class="form-control ml-2" name="maxYear" placeholder="Max">
-          </div>
-        </div>
-        
-        <div class="d-grid pt-1"><button type="submit" class="btn btn-light">Filtriraj</button></div>
 
-        <input type="hidden" name="user_zacetek" value="{{user_zacetek}}">
-        <input type="hidden" name="user_konec" value="{{user_konec}}">
-        <input type="hidden" name="st_ljudi" value="{{st_ljudi}}">
-        <input type="hidden" name="user_tip" value="{{user_tip}}">
-      </form>
+          <div class="d-grid"><button type="submit" class="btn btn-light btn-block">Filtriraj</button></div>
+
+          <input type="hidden" name="user_zacetek" value="{{ user_zacetek }}">
+          <input type="hidden" name="user_konec" value="{{ user_konec }}">
+          <input type="hidden" name="st_ljudi" value="{{ st_ljudi }}">
+          <input type="hidden" name="user_tip" value="{{ user_tip }}">
+        </form>
+      </div>
     </div>
 
 
+    <!-- Plovila -->
+    <div class="col-lg-9">
+      <div class="container-sm mb-4">
+        <h2 class="fw-lighter">Najdenih {{len(prosta_plovila)}} plovil, ki vam ustrezajo</h2>
+      </div>
+      <div class="container-sm">
+        <ul class="list-group">
+          %for plovilo in prosta_plovila:
+          <li class="container-sm list-group-item">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h4>{{ plovilo.ime }}</h4>
+                <table class="table table-borderless table-sm">
+                  <tr>
+                    <td><span class="fw-lighter">Letnik: </span>{{ plovilo.letnik }}</td>
+                    <td><span class="fw-lighter">Tip plovila: </span>{{ plovilo.tip }}</td>
+                  </tr>
+                  <tr>
+                    <td><span class="fw-lighter">Št. oseb: </span>{{ plovilo.kapaciteta }}</td>
+                    <td><span class="fw-lighter">Dolžina: </span>{{ plovilo.dolzina }}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="col-md-3">
+                %if plovilo.charter == "Angelina Yacht Charter":
+                <img src="{{ url('static', filename='angelina.png') }}" width="150px" style="max-height: 80px;">
+                %elif plovilo.charter == "Dream Yacht Charter":
+                <img src="{{ url('static', filename='dream.png') }}" width="150px" style="max-height: 80px;">
+                %elif plovilo.charter == "Euronautic":
+                <img src="{{ url('static', filename='euronautic.png') }}" width="150px" style="max-height: 80px;">
+                %else:
+                <img src="{{ url('static', filename='pitter.png') }}" width="150px" style="max-height: 80px;">
+                %end
+              </div>
+
+              <div class="col-md-3">
+                <p class="fs-3">{{ plovilo.cena }}€<span class="fw-lighter fs-5">/dan</span></p>
+                <form action="{{ url('/naredi_rezervacijo') }}" method="POST">
+                  <input type="hidden" name="user_zacetek" value="{{ user_zacetek }}">
+                  <input type="hidden" name="user_konec" value="{{ user_konec }}">
+                  <input type="hidden" name="plovilo" value="{{ plovilo.registracija }}">
+                  <div class="d-grid"><button type="submit" class="btn btn-danger btn-sm">Rezerviraj</button></div>
+                </form>
+              </div>
+            </div>
+          </li>
+          %end
+        </ul>
+      </div>
+    </div>
   </div>
 </div>

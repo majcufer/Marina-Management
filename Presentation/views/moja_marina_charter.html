@@ -1,40 +1,137 @@
 %rebase('osnova.html', naslov='Moja Marina', stran='moja_marina_charter')
 
-<div >
-  Rezervacije
-  <div style="flex:1;">
-    <table >
-      <thead>
-          <tr>
-              <th>Id</th>
-              <th>Začetek</th>
-              <th>Konec</th>
-              <th>Gost</th>  
-              <th>Plovilo</th>
-            </tr>
-      </thead>
-    
-    %for rezervacija in rezervacije:
-      <tr>
-          <td>{{rezervacija.id}}</td>
-          <td>{{rezervacija.zacetek}}</td>
-          <td>{{rezervacija.konec}}</td>
-          <td>{{rezervacija.gost}}</td>
-          <td>{{rezervacija.plovilo}}</td>
-      </tr>
-    %end
-    </table>
-  </div>
-</div>
-<div>
-  Moji podatki
-  Ime: {{zaposleni.ime}}
-  Pozicija: {{zaposleni.opis}}
-  EMSO: {{zaposleni.emso}}
-  Uporabniško ime: {{uporabnik}}
-</div>
+<div class="container py-5">
+  <h1 class="mb-4 seymour-one-regular">Moja marina</h1>
+  <h2 class="mb-4 ">Ahoj {{zaposleni.ime}}!</h2>
 
+  <div class="row">
+    <!-- Uporabnik -->
+    <div class="col-md-4">
+      <div class="card mb-4 border-0 bg-primary-subtle">
+        <div class="card-body">
+          %if zaposleni.charter == 'Angelina Yacht Charter':
+          <div class="m-4 text-center">
+            <img src="{{ url('static', filename='angelina.png') }}" class="img-fluid rounded">
+          </div>
+          %elif zaposleni.charter == 'Dream Yacht Charter':
+          <div class="m-4 text-center">
+            <img src="{{ url('static', filename='dream.png') }}" class="img-fluid rounded">
+          </div>
+          %elif zaposleni.charter == 'Pitter Yachting':
+          <div class="m-4 text-center">
+            <img src="{{ url('static', filename='pitter.png') }}" class="img-fluid rounded">
+          </div>
+          %else:
+          <div class="m-4 text-center">
+            <img src="{{ url('static', filename='euronautic.png') }}" class="img-fluid rounded">
+          </div>
+          %end
+          <h5 class="card-title">Moji podatki</h5>
+          <ul class="list-group bg-body-tertiary">
+            <li class="list-group-item"><strong>Uporabniško ime:</strong> {{uporabnik}}</li>
+            <li class="list-group-item"><strong>Ime:</strong> {{zaposleni.ime}}</li>
+            <li class="list-group-item"><strong>EMŠO:</strong> {{zaposleni.emso}}</li>
+            <li class="list-group-item"><strong>Pozicija:</strong> {{zaposleni.opis}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  
+    <!-- Rezervacije -->
+    <div class="col-md-8">
+      <div class="card border-0 bg-body-secondary">
+        <div class="card-body">
+          <h5 class="card-title">Vse Rezervacije</h5>
+          <div class="row align-items-center text-center p-3">
+            <div class="col-md-2">Id</div>
+            <div class="col-md">Začetek</div>
+            <div class="col-md">Konec</div>
+            <div class="col-md"></div>
+          </div>
+          <ul class="list-group">
+            %for rezervacija in rezervacije:
+            <li class="list-group-item bg-body-tertiary">
 
-  
+              <div class="row align-items-center text-center">
+                <div class="col-md-2">
+                  {{ rezervacija.id }}
+                </div>
+                <div class="col-md">
+                  {{ rezervacija.zacetek }}
+                </div>
+                <div class="col-md">
+                  {{ rezervacija.konec }}
+                </div>
+                <div class="col-md d-grid">
+                  <button class="btn btn-dark" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#reservationDetails{{rezervacija.id}}" aria-expanded="false"
+                    aria-controls="reservationDetails{{rezervacija.id}}">
+                    Več
+                  </button>
+                </div>
+              </div>
+
+              <div class="collapse" id="reservationDetails{{rezervacija.id}}">
+                <div class="card card-body mt-2 border-0 bg-transparent">
+                  <div class="d-flex justify-content-end">
+                    <button type="button" class="btn-close" data-bs-toggle="collapse"
+                      data-bs-target="#reservationDetails{{rezervacija.id}}" aria-expanded="false"
+                      aria-controls="reservationDetails{{rezervacija.id}}"></button>
+                  </div>
+                  <div class="row align-items-center">
+                    <div class="col-md-6">
+                      <h4>{{rezervacija.ime}}</h4>
+                      <table class="table-secondary table-borderless table-sm">
+                        <tr>
+                          <td><span class="fw-lighter">Letnik: </span>{{rezervacija.letnik}}</td>
+                          <td><span class="fw-lighter">Tip plovila: </span>{{rezervacija.tip}}</td>
+                        </tr>
+                        <tr>
+                          <td><span class="fw-lighter">Št. oseb: </span>{{rezervacija.kapaciteta}}</td>
+                          <td><span class="fw-lighter">Dolžina: </span>{{rezervacija.dolzina}}</td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <div class="col-md-3">
+                      %if rezervacija.charter == "Angelina Yacht Charter":
+                      <img src="{{ url('static', filename='angelina.png') }}" width="150px" style="max-height: 80px;">
+                      %elif rezervacija.charter == "Dream Yacht Charter":
+                      <img src="{{ url('static', filename='dream.png') }}" width="150px" style="max-height: 80px;">
+                      %elif rezervacija.charter == "Euronautic":
+                      <img src="{{ url('static', filename='euronautic.png') }}" width="150px" style="max-height: 80px;">
+                      %else:
+                      <img src="{{ url('static', filename='pitter.png') }}" width="150px" style="max-height: 80px;">
+                      %end
+                    </div>
+
+                    <div class="col-md-3">
+                      <p class="fs-3">155€<span class="fw-lighter fs-5">/dan</span></p>
+                    </div>
+                  </div>
+                  <hr class="my-3">
+                  <div>
+                    <h5>Podatki o gostu</h5>
+                    <table class="table-secondary table-borderless table-sm">
+                      <tr>
+                        <td><span class="fw-lighter">Ime: </span>{{rezervacija.ime_gosta}}</td>
+                        <td><span class="fw-lighter">EMŠO: </span>{{rezervacija.gost}}</td>
+                      </tr>
+                    </table>
+                  </div>
+
+                  <div class="d-flex justify-content-start mt-2">
+                    <form action="{{ url('/odstrani_rezervacijo') }}" method="POST">
+                      <input type="hidden" name="id" value="{{ rezervacija.id }}">
+                      <button type="submit" class="btn btn-danger">Prekliči rezervacijo</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+            %end
+          </ul>
+        </div>
+      </div>
+    </div>
