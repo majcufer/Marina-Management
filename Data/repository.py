@@ -2,7 +2,7 @@ import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
 import Data.auth_private as auth
 
-from Data.models import charter, crewlist, gost, plovilo, rezervacija, zaposleni, Uporabnik
+from Data.models import charter, crewlist, gost, plovilo, rezervacija, zaposleni, Uporabnik, rezervacijaDto, rezervacijaDto2
 from typing import List
 
 ## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
@@ -12,15 +12,6 @@ class Repo:
         # Ko ustvarimo novo instanco definiramo objekt za povezavo in cursor
         self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=5432)
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-    def dobi_plovila(self) -> List[plovilo]:
-        self.cur.execute("""
-            SELECT * FROM plovilo
-            order by ime
-        """)
-         # rezultate querya pretovrimo v python seznam objektov (transkacij)
-        plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
-        return plovila
     
     def dobi_prosta_plovila(self, user_zacetek, user_konec, st_ljudi, user_tip) -> List[plovilo]:
         if user_tip in ('Jadrnica', 'Katamaran', 'Motorna jahta'):
@@ -86,23 +77,33 @@ class Repo:
         """, (r.zacetek, r.konec, r.gost, r.plovilo))
         self.conn.commit()
 
-    def dobi_rezervacije_gost(self, gost: str) -> List[rezervacija]:
+    def odstrani_rezervacijo(self, id):
+        self.cur.execute("""
+            DELETE from rezervacija
+            WHERE id = %s
+        """, (id,))
+        self.conn.commit()
+
+    def dobi_rezervacije_gost(self, gost: str) -> List[rezervacijaDto]:
         self.cur.execute("""
             SELECT * FROM rezervacija
+            left join plovilo on registracija = plovilo
             WHERE gost = %s
         """, (gost,))
 
-        rezervacije = [rezervacija.from_dict(t) for t in self.cur.fetchall()]
+        rezervacije = [rezervacijaDto.from_dict(t) for t in self.cur.fetchall()]
         return rezervacije
     
-    def dobi_rezervacije_charter(self, charter: str) -> List[rezervacija]:
+    def dobi_rezervacije_charter(self, charter: str) -> List[rezervacijaDto2]:
         self.cur.execute("""
-            SELECT id, zacetek, konec, gost, plovilo FROM rezervacija
-            LEFT JOIN plovilo ON registracija = plovilo
-            WHERE charter = %s
+            SELECT rezervacija.*, plovilo.*, g.ime AS ime_gosta
+            FROM rezervacija
+            LEFT JOIN plovilo ON rezervacija.plovilo = plovilo.registracija
+            LEFT JOIN gost g ON rezervacija.gost = g.emso
+            WHERE plovilo.charter = %s
         """, (charter,))
 
-        rezervacije = [rezervacija.from_dict(t) for t in self.cur.fetchall()]
+        rezervacije = [rezervacijaDto2.from_dict(t) for t in self.cur.fetchall()]
         return rezervacije
 
     def dodaj_uporabnika(self, uporabnik: Uporabnik):
