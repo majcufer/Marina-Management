@@ -73,3 +73,36 @@ class UporabnikDto:
     username: str = field(default="")
     role: str = field(default="")
     oseba: str = field(default="")
+
+@dataclass_json
+@dataclass
+class rezervacijaDto:
+    id: int = field(default=0)
+    zacetek: date=field(default=date.today())
+    konec: date=field(default=date.today())
+    gost: str=field(default="")
+    plovilo: int = field(default=0)
+    ime : str = field(default="")
+    letnik: int = field(default=0)
+    kapaciteta: int = field(default=0)
+    tip: str=field(default="")
+    dolzina: float=field(default=0)
+    charter:str=field(default="")
+    cena:int = field(default=0)
+
+@dataclass_json
+@dataclass
+class rezervacijaDto2:
+    id: int = field(default=0)
+    zacetek: date=field(default=date.today())
+    konec: date=field(default=date.today())
+    gost: str=field(default="")
+    plovilo: int = field(default=0)
+    ime : str = field(default="")
+    letnik: int = field(default=0)
+    kapaciteta: int = field(default=0)
+    tip: str=field(default="")
+    dolzina: float=field(default=0)
+    charter:str=field(default="")
+    cena:int = field(default=0)
+    ime_gosta: str=field(default="")
