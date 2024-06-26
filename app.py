@@ -87,7 +87,7 @@ def naredi_rezervacijo():
 
     service.naredi_rezervacijo(zacetek, konec, gost, plovilo)
 
-    redirect(url('/'))
+    redirect(url('/moja_marina'))
 
 @post('/prijava')
 def prijava():
@@ -165,6 +165,14 @@ def moja_marina():
 
         return template('moja_marina_charter.html', rola=rola, uporabnik=uporabnik,
                         rezervacije=rezervacije, zaposleni=zaposleni)
+    
+@post('/odstrani_rezervacijo')
+def odstrani_rezervacijo():
+    id = request.forms.getunicode('id')
+
+    service.odstrani_rezervacijo(id)
+
+    redirect(url('/moja_marina'))
 
 #auth.dodaj_uporabnika('admin', 'admin', None, 'admin')
 #auth.dodaj_uporabnika('nika', 'charter', 100506505234, 'nika')
