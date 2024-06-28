@@ -37,3 +37,15 @@ class PlovilaService:
     
     def odstrani_rezervacijo(self, id):
         self.repo.odstrani_rezervacijo(id)
+    
+    def dobi_plovila_charter(self, charter:str) -> List[plovilo]:
+        return self.repo.dobi_plovila_charter(charter)
+    
+    def odstrani_plovilo(self, reg):
+        self.repo.odstrani_plovilo(reg)
+
+    def posodobi_ceno(self, cena, reg):
+        self.repo.posodobi_ceno(cena, reg)
+    
+    def dodaj_plovilo(self, cena, ime, kapaciteta, letnik, tip, dolzina, charter):
+        self.repo.dodaj_plovilo(cena, ime, kapaciteta, letnik, tip, dolzina, charter)

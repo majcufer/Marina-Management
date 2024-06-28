@@ -7,8 +7,9 @@
   <div class="row">
     <!-- Uporabnik -->
     <div class="col-md-4">
-      <div class="card mb-4 border-0 bg-primary-subtle">
-        <div class="card-body">
+      <div class="card mb-4 border-0"
+      style="background-image: url('https://static.vecteezy.com/system/resources/previews/012/909/347/original/beach-background-with-blue-and-brown-gradient-colors-free-vector.jpg');">
+        <div class="card-body" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 8px;">
           %if zaposleni.charter == 'Angelina Yacht Charter':
           <div class="m-4 text-center">
             <img src="{{ url('static', filename='angelina.png') }}" class="img-fluid rounded">
@@ -34,6 +35,9 @@
             <li class="list-group-item"><strong>Pozicija:</strong> {{zaposleni.opis}}</li>
           </ul>
         </div>
+      </div>
+      <div>
+        <a href="{{ url('/upravljaj_plovila') }}" class="btn btn-dark btn-lg d-grid">Upravljaj plovila</a>
       </div>
     </div>
 
@@ -106,7 +110,7 @@
                     </div>
 
                     <div class="col-md-3">
-                      <p class="fs-3">155€<span class="fw-lighter fs-5">/dan</span></p>
+                      <p class="fs-3">{{rezervacija.cena}}<span class="fw-lighter fs-5">/dan</span></p>
                     </div>
                   </div>
                   <hr class="my-3">

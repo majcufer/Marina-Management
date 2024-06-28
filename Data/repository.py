@@ -12,6 +12,16 @@ class Repo:
         # Ko ustvarimo novo instanco definiramo objekt za povezavo in cursor
         self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=5432)
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    def dobi_plovila_charter(self, charter:str) -> List[plovilo]:
+        self.cur.execute("""
+            select * from plovilo
+            where charter = %s
+            order by ime
+        """, (charter,))
+        # rezultate querya pretovrimo v python seznam objektov (transkacij)
+        plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
+        return plovila
     
     def dobi_prosta_plovila(self, user_zacetek, user_konec, st_ljudi, user_tip) -> List[plovilo]:
         if user_tip in ('Jadrnica', 'Katamaran', 'Motorna jahta'):
@@ -170,3 +180,29 @@ class Repo:
             """, (minPrice, maxPrice, minLength, maxLength, minYear, maxYear))
         prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
         return prosta_plovila
+    
+    def odstrani_plovilo(self, reg):
+        self.cur.execute("""
+            DELETE from plovilo
+            WHERE registracija = %s;
+
+            DELETE from rezervacija
+            WHERE plovilo = %s;
+            
+        """, (reg, reg))
+        self.conn.commit()
+
+    def posodobi_ceno(self, cena, reg):
+        self.cur.execute("""
+            UPDATE plovilo
+            SET cena = %s
+            WHERE registracija = %s;
+        """, (cena, reg))
+        self.conn.commit()
+    
+    def dodaj_plovilo(self, cena, ime, kapaciteta, letnik, tip, dolzina, charter):
+        self.cur.execute("""
+            INSERT into plovilo(ime, letnik, kapaciteta, tip, dolzina, charter, cena)
+            VALUES (%s, %s, %s, %s, %s, %s, %s); 
+        """, (ime, letnik, kapaciteta, tip, dolzina, charter, cena))
+        self.conn.commit()

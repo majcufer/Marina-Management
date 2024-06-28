@@ -7,8 +7,9 @@
   <div class="row">
     <!-- Uporabnik -->
     <div class="col-md-4">
-      <div class="card mb-4 border-0 bg-primary-subtle">
-        <div class="card-body">
+      <div class="card mb-4 border-0"
+        style="background-image: url('https://static.vecteezy.com/system/resources/previews/012/909/347/original/beach-background-with-blue-and-brown-gradient-colors-free-vector.jpg');">
+        <div class="card-body" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 8px;">
           <h5 class="card-title">Moji podatki</h5>
           <ul class="list-group bg-body-tertiary">
             <li class="list-group-item"><strong>Uporabniško ime:</strong> {{uporabnik}}</li>
@@ -88,7 +89,7 @@
                     </div>
 
                     <div class="col-md-3">
-                      <p class="fs-3">155€<span class="fw-lighter fs-5">/dan</span></p>
+                      <p class="fs-3">{{rezervacija.cena}}<span class="fw-lighter fs-5">/dan</span></p>
                     </div>
                   </div>
 

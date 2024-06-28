@@ -1,0 +1,140 @@
+%rebase('osnova.html', naslov='Prosta Plovila', stran='prosta_plovila')
+
+<div class="container px-2 my-4">
+  <div class="container-sm mb-4">
+    <h2 class="fw-lighter">V marini imate {{len(plovila)}} plovil.</h2>
+  </div>
+  <div class="row justify-content-center">
+    <!-- gumbi-->
+    <div class="col-lg-3">
+      <form action="{{ url('/dodaj_plovilo') }}" method="POST">
+        <input type="hidden" name="charter" value="{{ zaposleni.charter }}">
+    
+        <div class="form-floating mb-3">
+          <input type="text" name="ime" class="form-control" id="ime" placeholder="Ime" required>
+          <label for="ime">Ime</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <input type="number" name="letnik" class="form-control" id="letnik" placeholder="Letnik" required>
+          <label for="letnik">Letnik</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <input type="number" name="kapaciteta" class="form-control" id="kapaciteta" placeholder="Kapaciteta" required>
+          <label for="kapaciteta">Kapaciteta</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <select name="tip" class="form-control" id="tip" required>
+            <option value="" disabled selected>Izberi tip</option>
+            <option value="Jadrnica">Jadrnica</option>
+            <option value="Motorna jahta">Motorna jahta</option>
+            <option value="Katamaran">Katamaran</option>
+          </select>
+          <label for="tip">Tip</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <input type="number" name="dolzina" class="form-control" id="dolzina" placeholder="Dolzina" step="0.01" required>
+          <label for="dolzina">Dolzina</label>
+        </div>
+    
+        <div class="form-floating mb-3">
+          <input type="number" name="cena" class="form-control" id="cena" placeholder="Cena" step="0.01" required>
+          <label for="cena">Cena</label>
+        </div>
+    
+        <div class="d-grid">
+          <button type="submit" class="btn btn-dark btn-lg">Dodaj plovilo</button>
+        </div>
+        
+      </form>
+    </div>
+    
+
+    
+
+    <!-- Plovila -->
+    <div class="col-lg-9">
+      <div class="container-sm">
+        <ul class="list-group">
+          %for plovilo in plovila:
+          <li class="container-sm list-group-item">
+            <div class="row align-items-center">
+              <div class="col-md-5">
+                <h4>{{plovilo.ime}}</h4>
+                <table class="table-secondary table-borderless table-sm">
+                  <tr>
+                    <td><span class="fw-lighter">Letnik: </span>{{plovilo.letnik}}</td>
+                    <td><span class="fw-lighter">Tip plovila: </span>{{plovilo.tip}}</td>
+                  </tr>
+                  <tr>
+                    <td><span class="fw-lighter">Št. oseb: </span>{{plovilo.kapaciteta}}</td>
+                    <td><span class="fw-lighter">Dolžina: </span>{{plovilo.dolzina}}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="col-md-3">
+                %if plovilo.charter == "Angelina Yacht Charter":
+                <img src="{{ url('static', filename='angelina.png') }}" width="150px" style="max-height: 80px;">
+                %elif plovilo.charter == "Dream Yacht Charter":
+                <img src="{{ url('static', filename='dream.png') }}" width="150px" style="max-height: 80px;">
+                %elif plovilo.charter == "Euronautic":
+                <img src="{{ url('static', filename='euronautic.png') }}" width="150px" style="max-height: 80px;">
+                %else:
+                <img src="{{ url('static', filename='pitter.png') }}" width="150px" style="max-height: 80px;">
+                %end
+              </div>
+
+              <div class="col-md-2">
+                <p class="fs-3">{{plovilo.cena}}<span class="fw-lighter fs-5">/dan</span></p>
+              </div>
+
+              <div class="col-md-2 mt-2">
+                <button class="btn btn-light" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#reservationDetails{{plovilo.registracija}}" aria-expanded="false"
+                  aria-controls="reservationDetails{{plovilo.registracija}}">
+                  Možnosti
+                </button>
+              </div>
+
+              <div class="collapse" id="reservationDetails{{plovilo.registracija}}">
+                <div class="row bg-transparent">
+                  <div class="d-flex justify-content-end">
+                    <button type="button" class="btn-close" data-bs-toggle="collapse"
+                      data-bs-target="#reservationDetails{{plovilo.registracija}}" aria-expanded="false"
+                      aria-controls="reservationDetails{{plovilo.registracija}}"></button>
+                  </div>
+
+                  <div class="col mt-2 form-group">
+                    <form action="{{ url('/posodobi_ceno') }}" method="POST">
+                      <input type="hidden" name="reg" value="{{ plovilo.registracija }}">
+                      <div class="input-group">
+                        <input type="number" name="cena" class="form-control" placeholder="Cena" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-warning" id="button-addon2">Posodobi ceno</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="col mt-2">
+                    <form action="{{ url('/odstrani_plovilo') }}" method="POST">
+                      <input type="hidden" name="reg" value="{{ plovilo.registracija }}">
+                      <button type="submit" class="btn btn-danger">Izbriši plovilo</button>
+                    </form>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </li>
+          %end
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

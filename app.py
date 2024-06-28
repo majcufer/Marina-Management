@@ -174,8 +174,59 @@ def odstrani_rezervacijo():
 
     redirect(url('/moja_marina'))
 
-#auth.dodaj_uporabnika('admin', 'admin', None, 'admin')
-#auth.dodaj_uporabnika('nika', 'charter', 100506505234, 'nika')
+@get('/upravljaj_plovila')
+@cookie_required
+def upravljaj_plovila():
+    """
+    Uporabniška stran, kjer direktor charterja lahko upravlja plovila
+    """
+
+    rola = request.get_cookie("rola")
+    uporabnik = request.get_cookie("uporabnik")
+
+    if rola == 'charter':
+        zaposleni = auth.dobi_zaposlenega(uporabnik)
+        rezervacije = service.dobi_rezervacije_charter(zaposleni.charter)
+        plovila = service.dobi_plovila_charter(zaposleni.charter)
+
+        return template('charter_plovila.html', rola=rola, uporabnik=uporabnik,
+                        rezervacije=rezervacije, zaposleni=zaposleni, plovila=plovila)
+    else:
+        pass
+
+@post('/odstrani_plovilo')
+def odstrani_plovilo():
+    reg = request.forms.getunicode('reg')
+
+    service.odstrani_plovilo(reg)
+
+    redirect(url('/upravljaj_plovila'))
+
+@post('/posodobi_ceno')
+def posodobi_ceno():
+    cena = request.forms.getunicode('cena')
+    reg = request.forms.getunicode('reg')
+
+    if cena:
+        service.posodobi_ceno(cena, reg)
+    else:
+        pass
+
+    redirect(url('/upravljaj_plovila'))
+
+@post('/dodaj_plovilo')
+def dodaj_plovilo():
+    cena = request.forms.getunicode('cena')
+    ime = request.forms.getunicode('ime')
+    kapaciteta = request.forms.getunicode('kapaciteta')
+    letnik = request.forms.getunicode('letnik')
+    tip = request.forms.getunicode('tip')
+    dolzina = request.forms.getunicode('dolzina')
+    charter = request.forms.getunicode('charter')
+
+    service.dodaj_plovilo(cena, ime, kapaciteta, letnik, tip, dolzina, charter)
+    
+    redirect(url('/upravljaj_plovila'))
 
 if __name__ == "__main__":
     run(host='localhost', port=SERVER_PORT, reloader=RELOADER, debug=True)
