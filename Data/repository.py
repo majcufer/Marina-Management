@@ -167,6 +167,15 @@ class Repo:
         z = zaposleni.from_dict(self.cur.fetchone())
         return z
     
+    def dobi_zaposlene(self, charter:str) -> List[zaposleni]:
+        self.cur.execute("""
+            SELECT * FROM zaposleni
+            WHERE charter = %s
+        """, (charter,))
+         
+        z = [zaposleni.from_dict(t) for t in self.cur.fetchall()]
+        return z
+    
     def filtriraj(self, minPrice, maxPrice, minLength, maxLength, minYear, maxYear) -> List[plovilo]:
         self.cur.execute("""
             SELECT * FROM filter
@@ -205,4 +214,18 @@ class Repo:
             INSERT into plovilo(ime, letnik, kapaciteta, tip, dolzina, charter, cena)
             VALUES (%s, %s, %s, %s, %s, %s, %s); 
         """, (ime, letnik, kapaciteta, tip, dolzina, charter, cena))
+        self.conn.commit()
+
+    def odstrani_zaposlenega(self, emso:str):
+        self.cur.execute("""
+            DELETE from zaposleni
+            WHERE emso = %s;
+        """, (emso,))
+        self.conn.commit()
+
+    def dodaj_zaposlenega(self, ime, emso, pozicija, charter):
+        self.cur.execute("""
+            INSERT into zaposleni(emso, ime, opis, charter)
+            VALUES (%s, %s, %s, %s); 
+        """, (emso, ime, pozicija, charter))
         self.conn.commit()

@@ -180,19 +180,14 @@ def upravljaj_plovila():
     """
     Uporabniška stran, kjer direktor charterja lahko upravlja plovila
     """
-
     rola = request.get_cookie("rola")
     uporabnik = request.get_cookie("uporabnik")
 
-    if rola == 'charter':
-        zaposleni = auth.dobi_zaposlenega(uporabnik)
-        rezervacije = service.dobi_rezervacije_charter(zaposleni.charter)
-        plovila = service.dobi_plovila_charter(zaposleni.charter)
+    zaposleni = auth.dobi_zaposlenega(uporabnik)
+    plovila = service.dobi_plovila_charter(zaposleni.charter)
 
-        return template('charter_plovila.html', rola=rola, uporabnik=uporabnik,
-                        rezervacije=rezervacije, zaposleni=zaposleni, plovila=plovila)
-    else:
-        pass
+    return template('charter_plovila.html', rola=rola, uporabnik=uporabnik,
+                        zaposleni=zaposleni, plovila=plovila)
 
 @post('/odstrani_plovilo')
 def odstrani_plovilo():
@@ -227,6 +222,40 @@ def dodaj_plovilo():
     service.dodaj_plovilo(cena, ime, kapaciteta, letnik, tip, dolzina, charter)
     
     redirect(url('/upravljaj_plovila'))
+
+@get('/upravljaj_zaposlene')
+@cookie_required
+def upravljaj_zaposlene():
+    """
+    Uporabniška stran, kjer direktor charterja lahko upravlja zaposlene
+    """
+    rola = request.get_cookie("rola")
+    uporabnik = request.get_cookie("uporabnik")
+
+    zaposleni_user = auth.dobi_zaposlenega(uporabnik)
+    zaposleni = auth.dobi_zaposlene(zaposleni_user.charter)
+
+    return template('zaposleni.html', rola=rola, uporabnik=uporabnik,
+                    zaposleni_user=zaposleni_user, zaposleni=zaposleni)
+
+@post('/odstrani_zaposlenega')
+def odstrani_zaposlenega():
+    emso = request.forms.getunicode('emso')
+
+    auth.odstrani_zaposlenega(emso)
+
+    redirect(url('/upravljaj_zaposlene'))
+
+@post('/dodaj_zaposlenega')
+def dodaj_zaposlenega():
+    ime = request.forms.getunicode('ime')
+    emso = request.forms.getunicode('emso')
+    pozicija = request.forms.getunicode('pozicija')
+    charter = request.forms.getunicode('charter')
+
+    auth.dodaj_zaposlenega(ime, emso, pozicija, charter)
+
+    redirect(url('/upravljaj_zaposlene'))
 
 if __name__ == "__main__":
     run(host='localhost', port=SERVER_PORT, reloader=RELOADER, debug=True)

@@ -1,0 +1,80 @@
+%rebase('osnova.html', naslov='Prosta Plovila', stran='prosta_plovila')
+
+<div class="container px-2 my-4">
+  <div class="row justify-content-center">
+    <!-- gumbi-->
+    <div class="col-lg-3">
+      <h5 class="card-title p-2 fw-bold mt-4"></h5>
+      <form action="{{ url('/dodaj_zaposlenega') }}" method="POST">
+        <input type="hidden" name="charter" value="{{ zaposleni_user.charter }}">
+
+        <div class="form-floating mb-3">
+          <input type="text" name="ime" class="form-control" id="ime" placeholder="Ime" required>
+          <label for="ime">Ime</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" name="emso" class="form-control" id="emso" placeholder="EMŠO" required>
+          <label for="emso">EMŠO</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" name="pozicija" class="form-control" id="pozicija" placeholder="Pozicija" required>
+          <label for="pozicija">Pozicija</label>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-dark btn-lg">Dodaj zaposlenega</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Zaposleni -->
+    <div class="col-lg-9">
+      <div class="container-sm">
+        <h5 class="card-title p-2 fw-bold">
+          <div class="row">
+            <div class="col">IME</div>
+            <div class="col">EMŠO</div>
+            <div class="col">POZICIJA</div>
+            <div class="col"></div>
+          </div>
+        </h5>
+        <ul class="list-group">
+          %for delavec in zaposleni:
+          <li class="container-sm list-group-item">
+            <div class="row align-items-center">
+              <div class="col-md">{{delavec.ime}}</div>
+              <div class="col-md">{{delavec.emso}}</div>
+              <div class="col-md">{{delavec.opis}}</div>
+
+              <div class="col-md mt-2">
+                <button class="btn btn-light" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#{{delavec.emso}}" aria-expanded="false"
+                  aria-controls="{{delavec.emso}}">
+                  Možnosti
+                </button>
+              </div>
+
+              <div class="collapse" id="{{delavec.emso}}">
+                <div class="row bg-transparent">
+
+                  <div class="col mt-2">
+                    <form action="{{ url('/odstrani_zaposlenega') }}" method="POST">
+                      <input type="hidden" name="emso" value="{{ delavec.emso }}">
+                      <button type="submit" class="btn btn-danger">Odstrani zaposlenega</button>
+                    </form>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </li>
+          %end
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

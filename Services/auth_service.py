@@ -81,3 +81,12 @@ class AuthService:
     def dobi_zaposlenega(self, uporabnik:str) -> zaposleni:
         zaposleni = self.repo.dobi_zaposlenega(uporabnik)
         return zaposleni
+    
+    def dobi_zaposlene(self, charter:str) -> List[zaposleni]:
+        return self.repo.dobi_zaposlene(charter)
+    
+    def odstrani_zaposlenega(self, emso:str):
+        self.repo.odstrani_zaposlenega(emso)
+
+    def dodaj_zaposlenega(self, ime, emso, pozicija, charter):
+        self.repo.dodaj_zaposlenega(ime, emso, pozicija, charter)
