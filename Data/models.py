@@ -31,13 +31,6 @@ class charter:
 
 @dataclass_json
 @dataclass
-class crewlist:    
-    id : int = field(default=0)
-    oseba : str=field(default="")
-    vloga: str=field(default="")
-
-@dataclass_json
-@dataclass
 class gost:    
     emso : str=field(default="")
     ime : str=field(default="")
@@ -58,6 +51,15 @@ class zaposleni:
     ime : str=field(default="")
     opis: str=field(default="")
     charter: str=field(default="")
+
+@dataclass_json
+@dataclass
+class zaposleniDto:
+    emso : str=field(default="")
+    ime : str=field(default="")
+    opis: str=field(default="")
+    charter: str=field(default="")
+    username: str=field(default="")
 
 @dataclass_json
 @dataclass

@@ -50,17 +50,41 @@
               <div class="col-md">{{delavec.opis}}</div>
 
               <div class="col-md mt-2">
-                <button class="btn btn-light" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#{{delavec.emso}}" aria-expanded="false"
-                  aria-controls="{{delavec.emso}}">
+                <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#{{delavec.emso}}"
+                  aria-expanded="false" aria-controls="{{delavec.emso}}">
                   Možnosti
                 </button>
               </div>
 
               <div class="collapse" id="{{delavec.emso}}">
-                <div class="row bg-transparent">
+                <div class="row bg-transparent mt-3">
 
-                  <div class="col mt-2">
+                  <div class="col-8 mt-2 form-group">
+                    <form action="{{ url('/dodeli_dostop') }}" method="POST">
+                      <input type="hidden" name="emso" value="{{delavec.emso}}">
+                      <div class="input-group">
+                        %if delavec.username:
+                        <span class="input-group-text" style="font-size: smaller;">Uporabniško ime</span>
+                        <input type="text" name="username" class="form-control" placeholder="{{delavec.username}}"
+                          aria-describedby="button-addon2" disabled>
+                        <span class="input-group-text" style="font-size: smaller;">Geslo</span>
+                        <input type="text" name="password" class="form-control" placeholder="****"
+                          aria-describedby="button-addon2" disabled>
+                        %else:
+                        <span class="input-group-text" style="font-size: smaller;">Uporabniško ime</span>
+                        <input type="text" name="username" class="form-control" aria-describedby="button-addon2">
+                        <span class="input-group-text" style="font-size: smaller;">Geslo</span>
+                        <input type="text" name="password" class="form-control" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-warning" id="button-addon2">Dodeli dostop</button>
+                        </div>
+                        %end
+
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="col-4 mt-2">
                     <form action="{{ url('/odstrani_zaposlenega') }}" method="POST">
                       <input type="hidden" name="emso" value="{{ delavec.emso }}">
                       <button type="submit" class="btn btn-danger">Odstrani zaposlenega</button>

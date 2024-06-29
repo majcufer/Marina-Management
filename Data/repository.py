@@ -2,7 +2,7 @@ import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
 import Data.auth_private as auth
 
-from Data.models import charter, crewlist, gost, plovilo, rezervacija, zaposleni, Uporabnik, rezervacijaDto, rezervacijaDto2
+from Data.models import gost, plovilo, rezervacija, zaposleni, Uporabnik, rezervacijaDto, rezervacijaDto2, zaposleniDto
 from typing import List
 
 ## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
@@ -167,13 +167,14 @@ class Repo:
         z = zaposleni.from_dict(self.cur.fetchone())
         return z
     
-    def dobi_zaposlene(self, charter:str) -> List[zaposleni]:
+    def dobi_zaposlene(self, charter:str) -> List[zaposleniDto]:
         self.cur.execute("""
-            SELECT * FROM zaposleni
+            SELECT emso, ime, opis, charter, username FROM zaposleni
+            left join uporabniki on emso=oseba
             WHERE charter = %s
         """, (charter,))
          
-        z = [zaposleni.from_dict(t) for t in self.cur.fetchall()]
+        z = [zaposleniDto.from_dict(t) for t in self.cur.fetchall()]
         return z
     
     def filtriraj(self, minPrice, maxPrice, minLength, maxLength, minYear, maxYear) -> List[plovilo]:

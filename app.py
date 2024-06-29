@@ -157,8 +157,6 @@ def moja_marina():
         
         return template('moja_marina_gost.html', rola=rola, uporabnik=uporabnik, gost=gost,
                         rezervacije=rezervacije)
-    elif rola =='admin':
-        pass
     elif rola == 'charter':
         zaposleni = auth.dobi_zaposlenega(uporabnik)
         rezervacije = service.dobi_rezervacije_charter(zaposleni.charter)
@@ -256,6 +254,17 @@ def dodaj_zaposlenega():
     auth.dodaj_zaposlenega(ime, emso, pozicija, charter)
 
     redirect(url('/upravljaj_zaposlene'))
+
+@post('/dodeli_dostop')
+def dodeli_dostop():
+    username = request.forms.getunicode('username')
+    password = request.forms.getunicode('password')
+    emso = request.forms.getunicode('emso')
+
+    auth.dodaj_uporabnika(username, 'charter', emso, password)
+
+    redirect(url('/upravljaj_zaposlene'))
+
 
 if __name__ == "__main__":
     run(host='localhost', port=SERVER_PORT, reloader=RELOADER, debug=True)
