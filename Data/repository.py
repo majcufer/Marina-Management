@@ -1,16 +1,20 @@
 import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
 import Data.auth_private as auth
+import os
 
 from Data.models import gost, plovilo, rezervacija, zaposleni, Uporabnik, rezervacijaDto, rezervacijaDto2, zaposleniDto
 from typing import List
+
+# Preberemo port za bazo iz okoljskih spremenljivk
+DB_PORT = os.environ.get('POSTGRES_PORT', 5432)
 
 ## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
 
 class Repo:
     def __init__(self):
         # Ko ustvarimo novo instanco definiramo objekt za povezavo in cursor
-        self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=5432)
+        self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=DB_PORT)
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     def dobi_plovila_charter(self, charter:str) -> List[plovilo]:
