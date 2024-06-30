@@ -3,4 +3,3 @@ dataclasses_json
 bottle
 bs4
 bcrypt
-ipython

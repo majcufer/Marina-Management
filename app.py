@@ -5,19 +5,12 @@ from Services.plovila_service import PlovilaService
 from Services.auth_service import AuthService
 import os
 
-from IPython.display import display, HTML
-
 service = PlovilaService()
 auth = AuthService()
 
 # privzete nastavitve
 SERVER_PORT = os.environ.get('BOTTLE_PORT', 8080)
 RELOADER = os.environ.get('BOTTLE_RELOADER', True)
-
-
-
-def redirect(url):
-    display(HTML(f'<meta http-equiv="refresh" content="0;url={url}">'))
 
 def cookie_required(f):
     """
