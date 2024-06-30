@@ -4,3 +4,4 @@ bottle
 bcrypt
 jupyter-server-proxy
 bs4
+ipython
