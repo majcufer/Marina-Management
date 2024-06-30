@@ -1,6 +1,6 @@
 import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
-import Data.auth_private as auth
+import Data.auth_public as auth
 import os
 
 from Data.models import gost, plovilo, rezervacija, zaposleni, Uporabnik, rezervacijaDto, rezervacijaDto2, zaposleniDto
@@ -55,34 +55,6 @@ class Repo:
             """, (user_zacetek, user_zacetek, user_zacetek, user_konec, st_ljudi))
             prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
             return prosta_plovila
-        
-    def create_view(self, user_zacetek, user_konec, st_ljudi, user_tip) -> List[plovilo]:
-        if user_tip in ('Jadrnica', 'Katamaran', 'Motorna jahta'):
-            self.cur.execute("""
-                create or replace view filter as
-                select * from plovilo
-                where registracija not IN (
-                    select plovilo from rezervacija
-                    where
-                        (zacetek <= %s and konec > %s) OR
-                        (zacetek > %s and zacetek < %s)
-                ) 
-                AND kapaciteta >= %s AND tip = %s
-            """, (user_zacetek, user_zacetek, user_zacetek, user_konec, st_ljudi, user_tip))
-            self.conn.commit()
-        else:
-            self.cur.execute("""
-                create or replace view filter as
-                select * from plovilo
-                where registracija not IN (
-                    select plovilo from rezervacija
-                    where
-                        (zacetek <= %s and konec > %s) OR
-                        (zacetek > %s and zacetek < %s)
-                ) 
-                AND kapaciteta >= %s
-            """, (user_zacetek, user_zacetek, user_zacetek, user_konec, st_ljudi))
-            self.conn.commit()
 
     def dodaj_rezervacijo(self, r : rezervacija) -> List[rezervacija]:
         self.cur.execute("""
@@ -181,19 +153,46 @@ class Repo:
         z = [zaposleniDto.from_dict(t) for t in self.cur.fetchall()]
         return z
     
-    def filtriraj(self, minPrice, maxPrice, minLength, maxLength, minYear, maxYear) -> List[plovilo]:
-        self.cur.execute("""
-            SELECT * FROM filter
-            WHERE
-                (cena >= COALESCE(%s, 0)) AND
+    def filtriraj(self,user_zacetek,user_konec,st_ljudi,user_tip,minPrice,maxPrice,minLength,maxLength,minYear,maxYear) -> List[plovilo]:
+        if user_tip in ('Jadrnica', 'Katamaran', 'Motorna jahta'):
+            self.cur.execute("""
+                select * from plovilo
+                where registracija not IN (
+                    select plovilo from rezervacija
+                    where
+                        (zacetek <= %s and konec > %s) OR
+                        (zacetek > %s and zacetek < %s)
+                ) 
+                AND kapaciteta >= %s
+                AND tip = %s
+                AND (cena >= COALESCE(%s, 0)) AND
                 (cena <= COALESCE(%s, 10000)) AND
                 (dolzina >= COALESCE(%s, 0)) AND
                 (dolzina <= COALESCE(%s, 10000)) AND
                 (letnik >= COALESCE(%s, 0)) AND
                 (letnik <= COALESCE(%s, 10000))
-            """, (minPrice, maxPrice, minLength, maxLength, minYear, maxYear))
-        prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
-        return prosta_plovila
+            """, (user_zacetek,user_zacetek,user_zacetek,user_konec,st_ljudi,user_tip,minPrice,maxPrice,minLength,maxLength,minYear,maxYear))
+            prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
+            return prosta_plovila
+        else:
+            self.cur.execute("""
+                select * from plovilo
+                where registracija not IN (
+                    select plovilo from rezervacija
+                    where
+                        (zacetek <= %s and konec > %s) OR
+                        (zacetek > %s and zacetek < %s)
+                ) 
+                AND kapaciteta >= %s
+                AND (cena >= COALESCE(%s, 0)) AND
+                (cena <= COALESCE(%s, 10000)) AND
+                (dolzina >= COALESCE(%s, 0)) AND
+                (dolzina <= COALESCE(%s, 10000)) AND
+                (letnik >= COALESCE(%s, 0)) AND
+                (letnik <= COALESCE(%s, 10000))
+            """, (user_zacetek, user_zacetek, user_zacetek, user_konec, st_ljudi))
+            prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
+            return prosta_plovila
     
     def odstrani_plovilo(self, reg):
         self.cur.execute("""

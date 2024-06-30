@@ -67,10 +67,9 @@ def poisci_proste():
     uporabnik = request.get_cookie("uporabnik")
 
     if any([minPrice, maxPrice, minLength, maxLength, minYear, maxYear]):
-        prosta_plovila = service.filtriraj(minPrice, maxPrice, minLength, maxLength, minYear, maxYear)
+        prosta_plovila = service.filtriraj(user_zacetek,user_konec,st_ljudi,user_tip,minPrice,maxPrice,minLength,maxLength,minYear,maxYear)
     else:   
         prosta_plovila = service.dobi_prosta_plovila(user_zacetek, user_konec, st_ljudi, user_tip)
-        service.create_view(user_zacetek, user_konec, st_ljudi, user_tip)
         
     return template('prosta_plovila.html', prosta_plovila = prosta_plovila, user_zacetek=user_zacetek, user_konec=user_konec,
                     rola=rola, uporabnik=uporabnik, st_ljudi=st_ljudi, user_tip=user_tip)
