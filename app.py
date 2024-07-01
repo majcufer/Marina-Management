@@ -86,7 +86,7 @@ def naredi_rezervacijo():
 
     service.naredi_rezervacijo(zacetek, konec, gost, plovilo)
 
-    redirect(url('/moja_marina'))
+    redirect(url('moja_marina'))
 
 @post('/prijava')
 def prijava():
@@ -105,7 +105,7 @@ def prijava():
         response.set_cookie("uporabnik", username)
         response.set_cookie("rola", prijava.role)
         
-        redirect(url('/'))
+        redirect(url('index'))
 
     else:
         return template("prijava.html", uporabnik=None, rola=None, napaka="Neuspešna prijava. Napačno geslo ali uporabniško ime.")
@@ -139,7 +139,7 @@ def registracija_post():
     auth.dodaj_uporabnika(username, role, emso, password)
     auth.dodaj_gosta(emso, ime)
     
-    redirect(url('/'))
+    redirect(url('index'))
     
 @get('/moja_marina')
 @cookie_required
@@ -169,7 +169,7 @@ def odstrani_rezervacijo():
 
     service.odstrani_rezervacijo(id)
 
-    redirect(url('/moja_marina'))
+    redirect(url('moja_marina'))
 
 @get('/upravljaj_plovila')
 @cookie_required
@@ -192,7 +192,7 @@ def odstrani_plovilo():
 
     service.odstrani_plovilo(reg)
 
-    redirect(url('/upravljaj_plovila'))
+    redirect(url('upravljaj_plovila'))
 
 @post('/posodobi_ceno')
 def posodobi_ceno():
@@ -204,7 +204,7 @@ def posodobi_ceno():
     else:
         pass
 
-    redirect(url('/upravljaj_plovila'))
+    redirect(url('upravljaj_plovila'))
 
 @post('/dodaj_plovilo')
 def dodaj_plovilo():
@@ -218,7 +218,7 @@ def dodaj_plovilo():
 
     service.dodaj_plovilo(cena, ime, kapaciteta, letnik, tip, dolzina, charter)
     
-    redirect(url('/upravljaj_plovila'))
+    redirect(url('upravljaj_plovila'))
 
 @get('/upravljaj_zaposlene')
 @cookie_required
@@ -241,7 +241,7 @@ def odstrani_zaposlenega():
 
     auth.odstrani_zaposlenega(emso)
 
-    redirect(url('/upravljaj_zaposlene'))
+    redirect(url('upravljaj_zaposlene'))
 
 @post('/dodaj_zaposlenega')
 def dodaj_zaposlenega():
@@ -252,7 +252,7 @@ def dodaj_zaposlenega():
 
     auth.dodaj_zaposlenega(ime, emso, pozicija, charter)
 
-    redirect(url('/upravljaj_zaposlene'))
+    redirect(url('upravljaj_zaposlene'))
 
 @post('/dodeli_dostop')
 def dodeli_dostop():
@@ -262,7 +262,7 @@ def dodeli_dostop():
 
     auth.dodaj_uporabnika(username, 'charter', emso, password)
 
-    redirect(url('/upravljaj_zaposlene'))
+    redirect(url('upravljaj_zaposlene'))
 
 
 if __name__ == "__main__":
