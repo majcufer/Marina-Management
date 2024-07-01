@@ -3,7 +3,7 @@
 -- na začetku
 
 -- dovolimo povezavo in uporabo scheme public javnosti
-GRANT CONNECT ON DATABASE sem2024_gasperdr TO javnost;
+GRANT CONNECT ON DATABASE sem2024_majc TO javnost;
 GRANT USAGE ON SCHEMA public TO javnost;
 
 -- po ustvarjanju tabel
