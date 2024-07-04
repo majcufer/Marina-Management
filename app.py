@@ -40,7 +40,7 @@ def index():
     return template('index.html', rola = rola, uporabnik=uporabnik)
 
 @post('/iskanje/')
-def poisci_proste():
+def iskanje():
     """
     Stran s prostimi plovili za določeno obdobje.
     """   
