@@ -190,7 +190,7 @@ class Repo:
                 (dolzina <= COALESCE(%s, 10000)) AND
                 (letnik >= COALESCE(%s, 0)) AND
                 (letnik <= COALESCE(%s, 10000))
-            """, (user_zacetek, user_zacetek, user_zacetek, user_konec, st_ljudi))
+            """, (user_zacetek,user_zacetek,user_zacetek,user_konec,st_ljudi,user_tip,minPrice,maxPrice,minLength,maxLength,minYear,maxYear))
             prosta_plovila = [plovilo.from_dict(t) for t in self.cur.fetchall()]
             return prosta_plovila
     
